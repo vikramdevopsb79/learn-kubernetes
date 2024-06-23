@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-01
+spec:
+  containers:
+    - name: Frontend
+      image: docker.io/saivikram2020251/frontend

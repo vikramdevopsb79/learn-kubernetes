@@ -1,0 +1,11 @@
+# A pod with multi containers
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-02
+spec:
+  containers:
+    - name: nginx
+      image: docker.io/nginx
+    - name: mongodb
+      image: docker.io/mongo

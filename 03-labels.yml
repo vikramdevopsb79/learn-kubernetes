@@ -1,0 +1,34 @@
+apiversion: v1
+kind: pod
+metadata:
+  name: pod-03
+  labels:
+  appName: earth
+spec:
+  containers:
+    - name: nginx
+      image: docker.io/nginx
+
+---
+
+apiversion: v1
+kind: pod
+metadata:
+  name: pod-03-2
+  labels:
+  appName: mars
+spec:
+  containers:
+    - name: nginx
+      image: docker.io/nginx
+---
+apiversion: v1
+kind: pod
+metadata:
+  name: pod-03-3
+  labels:
+  appName: mars
+spec:
+  containers:
+    - name: nginx
+      image: docker.io/nginx
