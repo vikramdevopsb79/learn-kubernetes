@@ -21,24 +21,13 @@ spec:
           image: docker.io/saivikram2020251/frontend
 ---
 
-apiVersion: apps/v1
-kind: ReplicaSet
+apiVersion: v1
+kind: Pod
 metadata:
-  name: backend
+  name: frontend-pod
   labels:
-    app: guestbook
     tier: frontend
 spec:
-  # modify replicas according to your case
-  replicas: 3
-  selector:
-    matchLabels:
-      tier: frontend
-  template:
-    metadata:
-      labels:
-        tier: frontend
-    spec:
-      containers:
-        - name: frontend
-          image: docker.io/saivikram2020251/frontend
+  containers:
+    - name: nginx
+      image: docker.io/nginx
