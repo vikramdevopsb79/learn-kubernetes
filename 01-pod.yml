@@ -4,5 +4,5 @@ metadata:
   name: pod-01
 spec:
   containers:
-    - name: Frontend
+    - name: frontend
       image: docker.io/saivikram2020251/frontend
