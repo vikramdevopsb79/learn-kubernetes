@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: pod-03
   labels:
-  appName: earth
+    appName: earth
 spec:
   containers:
     - name: nginx
@@ -16,7 +16,7 @@ kind: Pod
 metadata:
   name: pod-03-2
   labels:
-  appName: mars
+    appName: mars
 spec:
   containers:
     - name: nginx
@@ -27,7 +27,7 @@ kind: Pod
 metadata:
   name: pod-03-3
   labels:
-  appName: mars
+    appName: mars
 spec:
   containers:
     - name: nginx
