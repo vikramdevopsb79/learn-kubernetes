@@ -3,7 +3,7 @@ resource "aws_eks_cluster" "example" {
   role_arn = aws_iam_role.example.arn
 
   vpc_config {
-    subnet_ids = data.aws_subnets.subnets.ids
+    subnet_ids = ["subnet-0f0b23eebaeb0c132", "subnet-03b85cb0d87240aa1"]
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
@@ -14,12 +14,12 @@ resource "aws_eks_cluster" "example" {
   ]
 }
 #From vpc we are transferring data so need check vpc data source subnets
-data "aws_subnets" "subnets" {
-  filter {
-    name   = "vpc-id"
-    values = ["vpc-090640b79f57fae25"]
-  }
-}
+# data "aws_subnets" "subnets" {
+#   filter {
+#     name   = "vpc-id"
+#     values = ["vpc-090640b79f57fae25"]
+#   }
+# }
 
 output "endpoint" {
   value = aws_eks_cluster.example.endpoint
