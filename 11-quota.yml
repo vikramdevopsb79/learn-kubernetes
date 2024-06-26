@@ -1,0 +1,63 @@
+#51:43
+#ResourceQuota in Kubernetes to limit the CPU and memory resources that can be requested and used by pods within a namespace.
+#in third pod  Similarly, its memory requests and limits also exceed the ResourceQuota limits.
+#in 1st and 2nd this pod can be created because its requests and limits are within the bounds specified by the ResourceQuota.
+
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu-demo
+spec:
+  hard:
+    requests.cpu: "500"
+    requests.memory: 2000Gi
+    limits.cpu: "500"
+    limits.memory: 2000Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-mem-cpu-demo
+spec:
+  containers:
+    - name: quota-mem-cpu-demo-ctr
+      image: nginx
+      resources:
+        limits:
+          memory: "800Mi"
+          cpu: "800m"
+        requests:
+          memory: "800Mi"
+          cpu: "400m"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-mem-cpu-demo-1
+spec:
+  containers:
+    - name: quota-mem-cpu-demo-ctr
+      image: redis
+      resources:
+        limits:
+          memory: "800Mi"
+          cpu: "800m"
+        requests:
+          memory: "800Mi"
+          cpu: "400m"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-mem-cpu-demo-2
+spec:
+  containers:
+    - name: quota-mem-cpu-demo-ctr
+      image: redis
+      resources:
+        limits:
+          memory: "1800Mi"
+          cpu: "1800m"
+        requests:
+          memory: "1800Mi"
+          cpu: "1400m"
