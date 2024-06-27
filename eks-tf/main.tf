@@ -70,7 +70,7 @@ resource "aws_eks_node_group" "example" {
   # Choosing Spot instance and instance type because of saving cost
   instance_types  = ["t3.medium", "t3.large"]
   capacity_type   = "SPOT"
-  enabled_cluster_log_types = ["audit"]
+#   enabled_cluster_log_types = ["audit"]
   scaling_config {
     desired_size = 1
     max_size     = 2
