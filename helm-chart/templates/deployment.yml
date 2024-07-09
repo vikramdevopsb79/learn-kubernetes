@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Values.appName }}
+  labels:
+    app: {{ .Values.appName }}
+spec:
+  containers:
+    - name: {{ .Values.appName }}
+      image: docker.io/saivikram2020251/{{ .Values.appName }}
