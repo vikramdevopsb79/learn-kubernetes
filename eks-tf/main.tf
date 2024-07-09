@@ -172,7 +172,7 @@ resource "aws_iam_role" "eks-cluster-autoscale" {
   }
 }
 
-
+#annoniations need to add in cluster to consume it and install kubegrunt
 resource "aws_iam_policy" "cluster-autoscale" {
   name        = "cluster-autoscale"
   path        = "/"
