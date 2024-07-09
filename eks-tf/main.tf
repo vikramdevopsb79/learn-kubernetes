@@ -2,6 +2,7 @@
 resource "aws_eks_cluster" "example" {
   name     = "example"
   role_arn = aws_iam_role.example.arn
+  enabled_cluster_log_types = ["audit"]
 
   vpc_config {
     subnet_ids = ["subnet-0f0b23eebaeb0c132", "subnet-03b85cb0d87240aa1"]
@@ -70,7 +71,7 @@ resource "aws_eks_node_group" "example" {
   # Choosing Spot instance and instance type because of saving cost
   instance_types  = ["t3.medium", "t3.large"]
   capacity_type   = "SPOT"
-#   enabled_cluster_log_types = ["audit"]
+#
   scaling_config {
     desired_size = 1
     max_size     = 2
@@ -113,4 +114,102 @@ resource "aws_eks_addon" "vpc-cni" {
   configuration_values = jsonencode({
     "enableNetworkPolicy" : "true"
   })
+}
+data "external" "oidc-thumbprint" {
+  program = [
+    "/usr/bin/kubergrunt", "eks", "oidc-thumbprint", "--issuer-url", "${aws_eks_cluster.example.identity[0].oidc[0].issuer}"
+  ]
+}
+
+resource "aws_iam_openid_connect_provider" "eks" {
+  url = aws_eks_cluster.example.identity[0].oidc[0].issuer
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+
+  thumbprint_list = [data.external.oidc-thumbprint.result.thumbprint]
+}
+
+locals {
+  eks_client_id = element(tolist(split("/", tostring(aws_eks_cluster.example.identity[0].oidc[0].issuer))), 4)
+}
+
+resource "aws_eks_identity_provider_config" "example" {
+  cluster_name = aws_eks_cluster.example.name
+
+  oidc {
+    client_id                     = local.eks_client_id
+    identity_provider_config_name = "iam-oidc"
+    issuer_url                    = aws_eks_cluster.example.identity[0].oidc[0].issuer
+  }
+}
+
+resource "aws_iam_role" "eks-cluster-autoscale" {
+  name = "eks-cluster-autoscale"
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Principal" : {
+          "Federated" : "arn:aws:iam::739561048503:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/${local.eks_client_id}"
+        },
+        "Condition" : {
+          "StringEquals" : {
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.eks_client_id}:aud" : "sts.amazonaws.com",
+            "oidc.eks.us-east-1.amazonaws.com/id/${local.eks_client_id}:sub" : "system:serviceaccount:kube-system:cluster-autoscaler"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "eks-cluster-autoscale"
+  }
+}
+
+
+resource "aws_iam_policy" "cluster-autoscale" {
+  name        = "cluster-autoscale"
+  path        = "/"
+  description = "cluster-autoscale"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "autoscaling:DescribeAutoScalingGroups",
+          "autoscaling:DescribeAutoScalingInstances",
+          "autoscaling:DescribeLaunchConfigurations",
+          "autoscaling:DescribeScalingActivities",
+          "autoscaling:DescribeTags",
+          "ec2:DescribeImages",
+          "ec2:DescribeInstanceTypes",
+          "ec2:DescribeLaunchTemplateVersions",
+          "ec2:GetInstanceTypesFromInstanceRequirements",
+          "eks:DescribeNodegroup"
+        ],
+        "Resource" : ["*"]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "autoscaling:SetDesiredCapacity",
+          "autoscaling:TerminateInstanceInAutoScalingGroup"
+        ],
+        "Resource" : ["*"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "cluster-autoscale" {
+  policy_arn = aws_iam_policy.cluster-autoscale.arn
+  role       = aws_iam_role.eks-cluster-autoscale.name
 }
