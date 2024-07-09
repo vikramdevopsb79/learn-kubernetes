@@ -13,4 +13,4 @@ spec:
     - effect: NoSchedule
       key: app
       operator: Equal
-      value: demo-project
+      value: demo-projectc
