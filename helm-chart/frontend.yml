@@ -1,2 +1,13 @@
-# this is values chart helm install frontend  ./helm-chart  -f  ./helm-chart/frontend.yml
+# this is values chart
+#helm install frontend  ./helm-chart  -f  ./helm-chart/frontend.yml
+ # helm upgrade -i  frontend  ./helm-chart  -f  ./helm-chart/frontend.yml
+# INSTALL ARGOCD EXPOSE TO OUTSIDE WORLD IN HELM CHART
+
 appName: frontend
+service:
+  type: ClusterIP
+  port: 80
+replicas: 1
+env: {}
+schemaJob:
+  enabled: false
