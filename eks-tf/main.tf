@@ -5,7 +5,7 @@ resource "aws_eks_cluster" "example" {
   enabled_cluster_log_types = ["audit"]
 
   vpc_config {
-    subnet_ids = ["subnet-0f0b23eebaeb0c132", "subnet-03b85cb0d87240aa1"]
+    subnet_ids = ["subnet-0b124925f5cc1454f", "subnet-0664653888f58619b"]
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
@@ -67,7 +67,7 @@ resource "aws_eks_node_group" "example" {
   cluster_name    = aws_eks_cluster.example.name
   node_group_name = "example"
   node_role_arn   = aws_iam_role.node-example.arn
-  subnet_ids      = ["subnet-0f0b23eebaeb0c132", "subnet-03b85cb0d87240aa1"]
+  subnet_ids      = ["subnet-0b124925f5cc1454f", "subnet-0664653888f58619b"]
   # Choosing Spot instance and instance type because of saving cost
   instance_types  = ["t3.medium", "t3.large"]
   capacity_type   = "SPOT"
