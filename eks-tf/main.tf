@@ -145,7 +145,7 @@ locals {
 #   }
 # }
 output "eksclient" {
-  value = local.eks_client_id
+  value = aws_eks_cluster.example.identity[0].oidc[0].issuer
 }
 
 resource "aws_iam_role" "eks-cluster-autoscale" {
