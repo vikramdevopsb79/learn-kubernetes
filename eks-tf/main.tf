@@ -144,9 +144,9 @@ locals {
 #     issuer_url                    = "https://oidc.eks.us-east-1.amazonaws.com/id/FB7C4178B91E5BDE3191F012F1FF10BB"
 #   }
 # }
-output "eksclient" {
-  value = aws_eks_cluster.example.identity[0].oidc[0].issuer
-}
+# output "eksclient" {
+#   value = aws_eks_cluster.example.identity[0].oidc[0].issuer
+# }
 
 resource "aws_iam_role" "eks-cluster-autoscale" {
   name = "eks-cluster-autoscale"
