@@ -135,16 +135,18 @@ locals {
   eks_client_id = element(tolist(split("/", tostring(aws_eks_cluster.example.identity[0].oidc[0].issuer))), 4)
 }
 
-resource "aws_eks_identity_provider_config" "example" {
-  cluster_name = aws_eks_cluster.example.name
-
-  oidc {
-    client_id                     = local.eks_client_id
-    identity_provider_config_name = "iam-oidc"
-    issuer_url                    = "https://oidc.eks.us-east-1.amazonaws.com/id/FB7C4178B91E5BDE3191F012F1FF10BB"
-  }
+# resource "aws_eks_identity_provider_config" "example" {
+#   cluster_name = aws_eks_cluster.example.name
+#
+#   oidc {
+#     client_id                     = local.eks_client_id
+#     identity_provider_config_name = "iam-oidc"
+#     issuer_url                    = "https://oidc.eks.us-east-1.amazonaws.com/id/FB7C4178B91E5BDE3191F012F1FF10BB"
+#   }
+# }
+output "eksclient" {
+  value = local.eks_client_id
 }
-
 
 resource "aws_iam_role" "eks-cluster-autoscale" {
   name = "eks-cluster-autoscale"
