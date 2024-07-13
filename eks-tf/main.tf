@@ -141,9 +141,10 @@ resource "aws_eks_identity_provider_config" "example" {
   oidc {
     client_id                     = local.eks_client_id
     identity_provider_config_name = "iam-oidc"
-    issuer_url                    = aws_eks_cluster.example.identity[0].oidc[0].issuer
+    issuer_url                    = "https://oidc.eks.us-east-1.amazonaws.com/id/FB7C4178B91E5BDE3191F012F1FF10BB"
   }
 }
+
 
 resource "aws_iam_role" "eks-cluster-autoscale" {
   name = "eks-cluster-autoscale"
