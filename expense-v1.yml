@@ -94,7 +94,7 @@ spec:
              - name: login_host
                value: mysql
              - name: app_repo
-               value: "https://github.com/raghudevopsb79/expense-backend"
+               value: "https://github.com/vikramdevopsorg/expense-backend"
              - name: schema_file
                value: /app/schema/backend.sql
            restartPolicy: Never
