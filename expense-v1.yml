@@ -81,8 +81,8 @@ kind: Job
 metadata:
    name: schema-load
 spec:
-   template:
-     spec:
+  template:
+    spec:
        containers:
        - name: load
          image: docker.io/saivikram2020251/schema-load
