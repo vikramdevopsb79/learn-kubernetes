@@ -19,4 +19,4 @@ spec:
           image: docker.io/saivikram2020251/{{ .Values.appName }}
           envFrom:
             - configMapRef:
-                name: { { .Values.appName } }
+                name: {{ .Values.appName }}
