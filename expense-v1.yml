@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: frontend
-      image: docker.io/saivikram2020251/frontend
+      image: docker.io/rkalluru/d79-frontend
 ---
 apiVersion: v1
 kind: Service
